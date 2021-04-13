@@ -14,13 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.shopappdemo.ItemFragment;
 import com.example.shopappdemo.customObjects.Categories;
 import com.example.shopappdemo.CategoryRecyclerViewAdaptor;
 import com.example.shopappdemo.R;
 
 import java.util.List;
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements CategoryRecyclerViewAdaptor.OnCategoryClickListener {
 
     private CategoryViewModel mViewModel;
 
@@ -52,10 +53,19 @@ public class CategoryFragment extends Fragment {
         titles = category.getCategoryList();
 
         linearLayoutManager = new LinearLayoutManager(getContext());
-        categoryRecyclerViewAdaptor = new CategoryRecyclerViewAdaptor(titles);
+        categoryRecyclerViewAdaptor = new CategoryRecyclerViewAdaptor(titles, this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(categoryRecyclerViewAdaptor);
 
     }
 
+    @Override
+    public void onCategoryClick(String category) {
+        Bundle b = new Bundle();
+        b.putString("category",category);
+        ItemFragment itemFragment = new ItemFragment();
+        itemFragment.setArguments(b);
+        getParentFragmentManager().beginTransaction().addToBackStack("category").replace(R.id.main_frag_holder, itemFragment ).commit();
+
+    }
 }

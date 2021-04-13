@@ -9,13 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import static android.content.ContentValues.TAG;
 
 public class ItemFragment extends Fragment {
 
     private ItemViewModel mViewModel;
+    String selectedCategory;
+    Bundle b;
 
     public static ItemFragment newInstance() {
         return new ItemFragment();
@@ -31,10 +37,21 @@ public class ItemFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-        // TODO: Use the ViewModel
+        b = this.getArguments();
+        //what if B is null
+        if(b != null){
+            selectedCategory = b.getString("category");
+        }
+        int test = 0;
+        test = mViewModel.GetCategoryItems(selectedCategory);
+        if(test != 0){
+            Log.d("ItemFragment", "onActivityCreated: success motherfucker");
+            Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
+        }
+        else
+            Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+
+
     }
 
-    public static class ItemViewModel extends ViewModel {
-        // TODO: Implement the ViewModel
-    }
 }

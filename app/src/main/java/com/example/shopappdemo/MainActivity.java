@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(savedInstanceState == null){
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frag_holder,new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.category);
+            getSupportFragmentManager().beginTransaction().addToBackStack("Home").replace(R.id.main_frag_holder,new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.home);
         }
 
     }
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.order:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frag_holder,new OrderFragment()).commit();
-            break;
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

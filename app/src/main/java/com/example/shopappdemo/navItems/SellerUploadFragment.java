@@ -33,6 +33,7 @@ public class SellerUploadFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     static int DATACODE;
+    static int IMAGECODE;
     private SellerUploadViewModel mViewModel;
 
     public static SellerUploadFragment newInstance() {
@@ -40,6 +41,9 @@ public class SellerUploadFragment extends Fragment {
     }
 
     Uri imageUri;
+
+    String selectedCategory, productName;
+    String productCount, productPrice;
 
     Categories categories;
     ImageView itemImage;
@@ -94,14 +98,43 @@ public class SellerUploadFragment extends Fragment {
     }
 
     private void proceedItem() {
-        Item currentItem = new Item(categorySpinner.getSelectedItem().toString() ,productNameEdt.getText().toString(), Integer.parseInt(productPriceEdt.getText().toString()), Integer.parseInt(productCountEdt.getText().toString()) );
-        DATACODE = mViewModel.uploadItemData(currentItem);
 
-        if(DATACODE == 1){
+        productPrice = productPriceEdt.getText().toString();
+        selectedCategory = categorySpinner.getSelectedItem().toString();
+        productName = productNameEdt.getText().toString();
+        productCount = productCountEdt.getText().toString();
+
+
+        if(productPrice.isEmpty()){
+            productPriceEdt.setError("Price is required!");
+            productPriceEdt.requestFocus();
+            return;
+        }
+        if(productName.isEmpty()){
+            productNameEdt.setError("Product name is required!");
+            productNameEdt.requestFocus();
+            return;
+        }
+        if(productCount.isEmpty()) {
+            productCountEdt.setError("Phone Number is required!");
+            productCountEdt.requestFocus();
+            return;
+        }
+        if(imageUri == null){
+            Toast.makeText(getContext(), "Product image is needed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Item currentItem = new Item( selectedCategory,productName, Integer.parseInt(productPrice) , Integer.parseInt(productCount),null);
+        DATACODE = mViewModel.uploadItemData(currentItem);
+        IMAGECODE = mViewModel.uploadItemImage(imageUri, productName);
+        if(DATACODE == 1 && IMAGECODE == 1){
             Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
         }
         else
             Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void OpenFileChooser() {

@@ -3,6 +3,9 @@
     <words>
       <w>datacode</w>
       <w>imagecode</w>
+      <w>itemsuccesscode</w>
+      <w>successcode</w>
+      <w>viewmodel</w>
       <w>wishlist</w>
     </words>
   </dictionary>

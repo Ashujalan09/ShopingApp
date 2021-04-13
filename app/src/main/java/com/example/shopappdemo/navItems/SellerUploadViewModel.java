@@ -1,6 +1,7 @@
 package com.example.shopappdemo.navItems;
 
 import android.content.Context;
+import android.net.Uri;
 
 import androidx.lifecycle.ViewModel;
 
@@ -35,6 +36,13 @@ public class SellerUploadViewModel extends ViewModel {
         DATACODE = mainRepository.uploadItemData(item);
 
         return DATACODE;
+    }
+
+    public int uploadItemImage(Uri uri, String name){
+        mainRepository = MainRepository.newInstance(mContext);
+        IMAGECODE = mainRepository.uploadItemImage(uri, name);
+
+        return IMAGECODE;
     }
 
 }

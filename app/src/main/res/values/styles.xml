@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#101820</item>
+        <item name="colorPrimary">#1A354E</item>
         <item name="colorPrimaryDark">#101820</item>
         <item name="colorAccent">#FEE715</item>
+        <item name="actionMenuTextColor">@color/colorAccent</item>
     </style>
 
 

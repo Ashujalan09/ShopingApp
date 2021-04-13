@@ -2,7 +2,9 @@ package com.example.shopappdemo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.net.URI;
 
 public class MainRepository {
     public static final int SUCCESS = 1;
@@ -27,16 +34,21 @@ public class MainRepository {
     static MainRepository instanceRepo;
     static Context mContext;
 
+    //return constants
+    static int ITEMSUCCESSCODE;
     static int DATACODE;
     static int IMAGECODE;
 
+    //firebase
     FirebaseFirestore db;
     private static FirebaseAuth mAuth;
+    StorageReference storageReference;
 
     //registration
     static UserCredentials regUserCredential;
     static String regEmail, regPhoneNumber, regPassword, regName;
     static String loginEmail, loginPassword;
+    static  String uploadSellerEmail;
 
     public static MainRepository newInstance(Context context){
         mContext = context;
@@ -49,15 +61,18 @@ public class MainRepository {
 
 
     public int uploadItemData(Item item){
+        mAuth = FirebaseAuth.getInstance();
+        uploadSellerEmail = mAuth.getCurrentUser().getEmail();
+        item.setSellerEmail(uploadSellerEmail);
         String category = item.getCategory();
         db = FirebaseFirestore.getInstance();
         db.collection("product")
                 .document("categories")
-                .collection(category)
-                .add(item)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .collection(category).document(item.getName())
+                .set(item)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         DATACODE = SUCCESS;
                     }
                 })
@@ -69,6 +84,27 @@ public class MainRepository {
                 });
 
         return DATACODE;
+    }
+
+    public int uploadItemImage(Uri uri, String name){
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        StorageReference ImageReference = storageReference.child("product"+ name);
+        ImageReference.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        IMAGECODE = 1;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        IMAGECODE = 0;
+                    }
+                });
+
+        return IMAGECODE;
     }
 
 
@@ -129,6 +165,8 @@ public class MainRepository {
             }
         });
 
+
+
         return DATACODE;
     }
 
@@ -153,6 +191,12 @@ public class MainRepository {
                 Log.d("User db update fail",e.getMessage());
             }
         });
+    }
+
+    public int GetCategoryItems(String category){
+        Log.d("Main repository", category);
+        ITEMSUCCESSCODE = 1;
+        return ITEMSUCCESSCODE;
     }
 
 

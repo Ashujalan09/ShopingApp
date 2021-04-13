@@ -4,17 +4,19 @@ public class Item {
 
     String category;
     String name;
+    String sellerEmail;
     int price;
     int quantity;
 
     //no arg constructor for firebase
     public Item(){}
 
-    public Item(String category, String name, int price, int quantity) {
+    public Item(String category, String name, int price, int quantity, String sellerEmail) {
         this.category = category;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.sellerEmail = sellerEmail;
     }
 
     public String getName() {
@@ -47,5 +49,13 @@ public class Item {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
     }
 }
